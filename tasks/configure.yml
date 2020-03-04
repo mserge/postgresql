@@ -24,7 +24,7 @@
     state: directory
     mode: 0700
   register: pgwal_dir_exist
-  when: postgresql_wal_directory != ""
+  when: postgresql_wal_directory
 
 - name: PostgreSQL | Make sure the postgres log directory exists
   file:
