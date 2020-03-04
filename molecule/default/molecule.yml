@@ -5,12 +5,19 @@ driver:
   name: docker
 lint: |
   yamllint . 
-  ansible-lint -x '702' . 
+  ansible-lint -x '702,206,503,602,502,303,204' . 
 platforms:
-  - name: instance
-    image: docker.io/pycontribs/centos:7
+  - name: Centos
+    image: dhoppeit/molecule-centos-7
+    command: "/sbin/init"
     pre_build_image: true
+    capabilities:
+      - SYS_ADMIN
+      - SYS_TIME
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
 provisioner:
   name: ansible
+  no_logs: false
 verifier:
   name: ansible

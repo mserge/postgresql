@@ -66,6 +66,8 @@
   become: yes
   become_user: "{{ postgresql_service_user }}"
   when: ansible_os_family == "Debian" and postgresql_cluster_reset and pgdata_dir_exist.changed
+  tags:
+    skip_ansible_lint
 
 - name: PostgreSQL | Reset the cluster - create a new one (with specified encoding and locale) | Debian
   shell: >
@@ -74,9 +76,9 @@
     {{ postgresql_version }} {{ postgresql_cluster_name }}
     --
     {% if postgresql_data_checksums and postgresql_version is version_compare('9.3', '>=') %}--data-checksums{% endif %}
-    {% if postgresql_pwfile != "" %}--pwfile={{ postgresql_pwfile }} {% endif %}
-    {% if postgresql_wal_directory != "" and postgresql_version is version_compare('10', '<') %}--xlogdir={{ postgresql_wal_directory }} {% endif %}
-    {% if postgresql_wal_directory != "" and postgresql_version is version_compare('10', '>=') %}--waldir={{ postgresql_wal_directory }} {% endif %}
+    {% if postgresql_pwfile %}--pwfile={{ postgresql_pwfile }} {% endif %}
+    {% if postgresql_wal_directory and postgresql_version is version_compare('10', '<') %}--xlogdir={{ postgresql_wal_directory }} {% endif %}
+    {% if postgresql_wal_directory and postgresql_version is version_compare('10', '>=') %}--waldir={{ postgresql_wal_directory }} {% endif %}
   become: yes
   become_user: "{{ postgresql_service_user }}"
   when: ansible_os_family == "Debian" and postgresql_cluster_reset and pgdata_dir_exist.changed
@@ -104,9 +106,9 @@
     {{ postgresql_bin_directory }}/initdb -D {{ postgresql_data_directory }}
     --locale={{ postgresql_locale }} --encoding={{ postgresql_encoding }}
     {% if postgresql_data_checksums and postgresql_version is version_compare('9.3', '>=') %}--data-checksums{% endif %}
-    {% if postgresql_pwfile != "" %}--pwfile={{ postgresql_pwfile }} {% endif %}
-    {% if postgresql_wal_directory != "" and postgresql_version is version_compare('10', '<') %}--xlogdir={{ postgresql_wal_directory }} {% endif %}
-    {% if postgresql_wal_directory != "" and postgresql_version is version_compare('10', '>=') %}--waldir={{ postgresql_wal_directory }} {% endif %}
+    {% if postgresql_pwfile  %}--pwfile={{ postgresql_pwfile }} {% endif %}
+    {% if postgresql_wal_directory and postgresql_version is version_compare('10', '<') %}--xlogdir={{ postgresql_wal_directory }} {% endif %}
+    {% if postgresql_wal_directory and postgresql_version is version_compare('10', '>=') %}--waldir={{ postgresql_wal_directory }} {% endif %}
   become: yes
   become_user: "{{ postgresql_service_user }}"
   when: ansible_os_family == "RedHat" and

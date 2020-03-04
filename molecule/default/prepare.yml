@@ -1,0 +1,8 @@
+---
+- name: sudo
+  hosts: all
+  tasks:
+    - name: install sudo
+      yum:
+        name: sudo
+        state: present

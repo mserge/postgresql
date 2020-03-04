@@ -49,7 +49,7 @@
   tags: [postgresql, postgresql-users]
 
 - import_tasks: monit.yml
-  when: monit_protection is defined and monit_protection == true
+  when: monit_protection is defined and monit_protection
   tags: [postgresql, postgresql-monit]
 
 - import_tasks: check_pg_version_mismatch.yml
